@@ -1,0 +1,154 @@
+{
+  "description": "中国电影展示空间分类体系，用于 museums.json 的 classification 字段和 photos.json 的 metadata.object_type 字段。",
+  "version": "0.1.0",
+  "space_types": [
+    {
+      "id": "national-specialized-museum",
+      "label_zh": "国家级专题博物馆",
+      "label_en": "National Specialized Museum",
+      "description_zh": "由国家文物局或相关部委认定的国家级电影专题博物馆",
+      "examples": ["中国电影博物馆"]
+    },
+    {
+      "id": "city-specialized-museum",
+      "label_zh": "城市专题博物馆",
+      "label_en": "City Specialized Museum",
+      "description_zh": "由地方政府或文化机构设立的市级电影专题博物馆",
+      "examples": ["重庆电影博物馆"]
+    },
+    {
+      "id": "university-museum",
+      "label_zh": "高校博物馆",
+      "label_en": "University Museum",
+      "description_zh": "依托高等院校建立的电影/传媒类博物馆",
+      "examples": ["北京电影学院电影文化博物馆", "四川传媒学院传媒博物馆"]
+    },
+    {
+      "id": "archive-academic-institution",
+      "label_zh": "档案与学术机构",
+      "label_en": "Archive & Academic Institution",
+      "description_zh": "以电影档案保存和学术研究为主要职能的机构",
+      "examples": ["中国电影资料馆", "香港电影资料馆", "国家影视听中心（TFAI）"]
+    },
+    {
+      "id": "film-studio-heritage",
+      "label_zh": "制片厂旧址/工业遗产",
+      "label_en": "Film Studio Heritage Site",
+      "description_zh": "依托电影制片厂旧址建立的博物馆或展示空间",
+      "examples": ["长影旧址博物馆", "西影电影博物馆"]
+    },
+    {
+      "id": "film-park-theme-park",
+      "label_zh": "影视基地与主题公园",
+      "label_en": "Film Park & Theme Park",
+      "description_zh": "以影视拍摄基地或主题公园为载体的展示空间",
+      "examples": ["上海影视乐园", "青岛电影博物馆"]
+    },
+    {
+      "id": "non-state-museum",
+      "label_zh": "非国有博物馆",
+      "label_en": "Private Museum",
+      "description_zh": "由企业、个人或民间组织设立的博物馆",
+      "examples": ["北京大戚收音机电影机博物馆", "旧时光影音展览馆"]
+    },
+    {
+      "id": "school-enterprise-cooperative",
+      "label_zh": "校企共建",
+      "label_en": "School-Enterprise Cooperative",
+      "description_zh": "由学校与企业合作共建的展示空间",
+      "examples": ["盐城\"邂逅光影\"电影机馆"]
+    },
+    {
+      "id": "cinema-integrated",
+      "label_zh": "影城融合",
+      "label_en": "Cinema-Integrated",
+      "description_zh": "依托商业影城设立的展示区域",
+      "examples": ["嘉兴电影博物馆"]
+    },
+    {
+      "id": "public-museum",
+      "label_zh": "公立博物馆",
+      "label_en": "Public Museum",
+      "description_zh": "由地方政府或公共机构设立的博物馆",
+      "examples": ["谢晋故里乡村电影博物馆", "电影课博物馆"]
+    },
+    {
+      "id": "administrative-corporation",
+      "label_zh": "行政法人",
+      "label_en": "Administrative Corporation",
+      "description_zh": "依法设立的行政法人机构",
+      "examples": ["国家影视听中心（TFAI）"]
+    },
+    {
+      "id": "pending-verification",
+      "label_zh": "待补充/待核实",
+      "label_en": "Pending Verification",
+      "description_zh": "空间类型尚未核实",
+      "examples": []
+    }
+  ],
+  "natures": [
+    {
+      "id": "national",
+      "label_zh": "国家",
+      "label_en": "National"
+    },
+    {
+      "id": "non-state",
+      "label_zh": "非国有",
+      "label_en": "Private / Non-State"
+    },
+    {
+      "id": "public",
+      "label_zh": "公立",
+      "label_en": "Public"
+    },
+    {
+      "id": "school-enterprise",
+      "label_zh": "校企共建",
+      "label_en": "School-Enterprise Cooperative"
+    },
+    {
+      "id": "administrative-corporation",
+      "label_zh": "行政法人",
+      "label_en": "Administrative Corporation"
+    },
+    {
+      "id": "pending-verification",
+      "label_zh": "待补充/待核实",
+      "label_en": "Pending Verification"
+    }
+  ],
+  "photo_categories": [
+    {
+      "id": "photo_cat_architecture",
+      "label_zh": "建筑外观",
+      "label_en": "Architecture",
+      "description_zh": "博物馆建筑外立面、入口、周边环境"
+    },
+    {
+      "id": "photo_cat_gallery",
+      "label_zh": "展厅空间",
+      "label_en": "Gallery Space",
+      "description_zh": "展厅内部空间、动线、照明、展柜布局"
+    },
+    {
+      "id": "photo_cat_tech_artifact",
+      "label_zh": "技术器物",
+      "label_en": "Technical Artifact",
+      "description_zh": "摄影机、放映机、胶片、剪辑设备等技术物"
+    },
+    {
+      "id": "photo_cat_scene_reconstruction",
+      "label_zh": "场景复原",
+      "label_en": "Scene Reconstruction",
+      "description_zh": "片场、影院、工作间的场景复原展示"
+    },
+    {
+      "id": "photo_cat_interactive",
+      "label_zh": "互动装置",
+      "label_en": "Interactive Installation",
+      "description_zh": "观众可参与的互动体验装置"
+    }
+  ]
+}

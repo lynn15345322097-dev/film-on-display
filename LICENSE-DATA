@@ -1,0 +1,13 @@
+# LICENSE-DATA — 数据许可
+
+data/ 目录下的结构化数据（museums.json、exhibitions.json、photos.json 的元数据字段、
+categories.json、references.csl.json）以 Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+International (CC BY-NC-SA 4.0) 许可发布。
+
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+重要提示：
+- 本许可仅适用于数据文件中的元数据和结构化信息，不适用于照片/图像文件。
+- 照片和媒体文件以 data/photos.json 中每条记录的 rights 和 visibility 字段为准。
+- 标记为 pending_verification 的字段不应作为确定事实引用。
+- 坐标信息以 geo.coordinate_source 为准，未核验的坐标不应直接用于精确地理分析。

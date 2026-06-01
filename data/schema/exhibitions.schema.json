@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://film-museum.example.org/schema/exhibitions.schema.json",
+  "title": "Exhibition Record",
+  "description": "Schema for an exhibition, gallery unit, or curated research route in data/exhibitions.json",
+  "type": "object",
+  "required": ["id", "title_zh", "museum_ids", "type"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Semantic identifier, e.g. film-into-museum",
+      "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+    },
+    "title_zh": {
+      "type": "string",
+      "description": "Chinese title"
+    },
+    "subtitle_zh": {
+      "type": "string"
+    },
+    "summary_zh": {
+      "type": "string"
+    },
+    "content_zh": {
+      "type": "string"
+    },
+    "museum_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "References to museum.id in museums.json"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["permanent_exhibition", "temporary_exhibition", "gallery_unit", "curated_research_route", "pending_verification"],
+      "description": "Exhibition type"
+    },
+    "chapters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title_zh", "museum_ids"],
+        "properties": {
+          "title_zh": { "type": "string" },
+          "subtitle_zh": { "type": "string" },
+          "research_question": { "type": "string" },
+          "museum_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "keywords": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

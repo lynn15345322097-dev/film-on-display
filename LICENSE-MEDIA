@@ -1,0 +1,16 @@
+# LICENSE-MEDIA — 媒体文件许可
+
+public/images/ 目录下的所有照片和媒体文件以逐张授权方式管理。
+
+**本项目不默认开放所有照片。** 每张照片的具体授权信息见 data/photos.json 中对应记录的
+rights 和 visibility 字段。在未确认照片的摄影师版权、机构限制和肖像权状态之前，
+所有照片的 visibility 默认为 "public_thumbnail_only"（仅缩略图公开）。
+
+在 reuse 任何照片前，请确认该照片在 data/photos.json 中的：
+1. visibility 状态
+2. photographer_copyright 许可条款
+3. institutional_restriction 限制说明
+4. personality_rights 肖像权状态
+
+照片版权（photographer_copyright）≠ 展品版权（institutional_restriction）。
+摄影师授权不代表博物馆馆方或展品权利人授权。

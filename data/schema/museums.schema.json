@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://film-museum.example.org/schema/museums.schema.json",
+  "title": "Museum Record",
+  "description": "Schema for a single museum record in data/museums.json",
+  "type": "object",
+  "required": ["id", "name_zh", "administrative_division", "geo", "classification"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Semantic identifier, e.g. cn-film-museum",
+      "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+    },
+    "name_zh": {
+      "type": "string",
+      "description": "Chinese name of the museum"
+    },
+    "name_en": {
+      "type": ["string", "null"],
+      "description": "English name, null if not available"
+    },
+    "administrative_division": {
+      "type": "object",
+      "required": ["region", "province", "city"],
+      "properties": {
+        "region": { "type": "string" },
+        "province": { "type": "string" },
+        "city": { "type": "string" },
+        "address": { "type": "string" }
+      }
+    },
+    "geo": {
+      "type": "object",
+      "required": ["coordinate_system", "coordinate_source"],
+      "properties": {
+        "latitude": {
+          "type": ["number", "null"],
+          "description": "Latitude in decimal degrees, null if unverified"
+        },
+        "longitude": {
+          "type": ["number", "null"],
+          "description": "Longitude in decimal degrees, null if unverified"
+        },
+        "coordinate_system": {
+          "type": "string",
+          "enum": ["WGS84", "GCJ02", "BD09", "unknown"],
+          "description": "Coordinate reference system"
+        },
+        "coordinate_source": {
+          "type": "string",
+          "enum": ["gps_field_measurement", "geocoding_from_address", "manual_estimation", "third_party_source", "pending_verification"],
+          "description": "How coordinates were obtained"
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "required": ["type", "nature"],
+      "properties": {
+        "type": { "type": "string" },
+        "nature": { "type": "string" }
+      }
+    },
+    "academic_context": {
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "space_observation": { "type": "string" },
+        "exhibition_analysis": { "type": "string" }
+      }
+    },
+    "visited": {
+      "type": "boolean",
+      "description": "Whether a field visit has been conducted"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["url", "caption", "category"],
+        "properties": {
+          "url": { "type": "string" },
+          "caption": { "type": "string" },
+          "category": {
+            "type": "string",
+            "enum": ["建筑外观", "展厅空间", "技术器物", "场景复原", "互动装置"]
+          }
+        }
+      }
+    }
+  }
+}

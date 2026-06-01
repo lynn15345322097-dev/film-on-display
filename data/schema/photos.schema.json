@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://film-museum.example.org/schema/photos.schema.json",
+  "title": "Photo Record",
+  "description": "Schema for a field photo metadata record in data/photos.json",
+  "type": "object",
+  "required": ["id", "museum_id", "rights", "visibility"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Semantic identifier, e.g. photo_cn_film_museum_projector_001",
+      "pattern": "^photo_[a-z0-9][a-z0-9-]*[a-z0-9]_\\d{3}$"
+    },
+    "museum_id": {
+      "type": "string",
+      "description": "References museum.id in museums.json"
+    },
+    "exhibition_id": {
+      "type": ["string", "null"],
+      "description": "References exhibition.id in exhibitions.json, null if not linked"
+    },
+    "filename": {
+      "type": "string",
+      "description": "Path relative to public/images/"
+    },
+    "thumbnail": {
+      "type": "string",
+      "description": "Path relative to public/images/thumbnails/"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "title_zh": { "type": "string" },
+        "object_type": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "photographer": { "type": "string" },
+        "shooting_date": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "required": ["photographer_copyright", "institutional_restriction", "personality_rights"],
+      "properties": {
+        "photographer_copyright": {
+          "type": "object",
+          "required": ["holder", "license"],
+          "properties": {
+            "holder": { "type": "string" },
+            "license": {
+              "type": "string",
+              "enum": ["CC BY 4.0", "CC BY-SA 4.0", "CC BY-NC 4.0", "CC BY-NC-SA 4.0", "CC BY-ND 4.0", "CC BY-NC-ND 4.0", "CC0", "All Rights Reserved", "pending_verification"]
+            },
+            "commercial_use": { "type": "boolean" },
+            "derivatives_allowed": { "type": "boolean" },
+            "attribution_required": { "type": "boolean" }
+          }
+        },
+        "institutional_restriction": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["unrestricted", "attribution-only", "non-commercial-research-only", "restricted", "pending", "pending_verification"]
+            },
+            "institution": { "type": "string" },
+            "download_allowed": { "type": "boolean" },
+            "notes": { "type": "string" }
+          }
+        },
+        "personality_rights": {
+          "type": "object",
+          "required": ["contains_identifiable_person"],
+          "properties": {
+            "contains_identifiable_person": { "type": "boolean" },
+            "model_release": {
+              "type": "string",
+              "enum": ["obtained", "not_obtained", "not_applicable", "pending_verification"]
+            }
+          }
+        }
+      }
+    },
+    "visibility": {
+      "type": "string",
+      "enum": ["public", "public_thumbnail_only", "restricted", "private", "internal_research_only"],
+      "description": "Visibility level of this photo"
+    },
+    "references": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Reference IDs linking to references.csl.json"
+    }
+  }
+}
