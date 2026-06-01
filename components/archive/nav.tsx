@@ -13,6 +13,12 @@ const navItems = [
     label: "主题展览",
     active: (pathname: string) => pathname.startsWith("/exhibitions"),
   },
+  {
+    href: "/spatial-analysis",
+    label: "空间分析",
+    active: (pathname: string) => pathname.startsWith("/spatial-analysis"),
+  },
+  { href: "/method", label: "方法", active: (pathname: string) => pathname.startsWith("/method") },
   { href: "/about", label: "关于", active: (pathname: string) => pathname.startsWith("/about") },
   {
     href: "/account",
