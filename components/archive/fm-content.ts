@@ -1,111 +1,19 @@
-import categoriesData from "@/data/categories.json";
-import exhibitionsData from "@/data/exhibitions.json";
-import museumsData from "@/data/museums.json";
-import photosData from "@/data/photos.json";
+import {
+  countBy,
+  getAllExhibitions,
+  getAllMuseums,
+  getAllPhotos,
+  getCategories,
+  getPhotoCategoryStats,
+} from "@/lib/museums";
+import type { MuseumRecord } from "@/types";
 
-export type MuseumRecord = {
-  id: string;
-  name: string;
-  nameEn?: string | null;
-  region: string;
-  province: string;
-  city: string;
-  address: string;
-  type: string;
-  nature: string;
-  visited?: boolean;
-  tags: string[];
-  categories?: string[];
-  coordinates: [number, number];
-  description: string;
-  spaceObservation: string;
-  exhibitionAnalysis: string;
-};
+export type { ExhibitionRecord, MuseumRecord, PhotoRecord } from "@/types";
 
-export type PhotoRecord = {
-  id: string;
-  museum_id: string;
-  exhibition_id: string | null;
-  filename: string;
-  thumbnail: string;
-  metadata: {
-    title_zh: string;
-    object_type: string;
-    tags: string[];
-    photographer: string;
-    shooting_date: string;
-    description: string;
-  };
-  rights: {
-    photographer_copyright: {
-      holder: string;
-      license: string;
-      commercial_use: boolean;
-      derivatives_allowed: boolean;
-      attribution_required: boolean;
-    };
-    institutional_restriction: {
-      status: string;
-      institution: string;
-      download_allowed: boolean;
-      notes: string;
-    };
-    personality_rights: {
-      contains_identifiable_person: boolean;
-      model_release: string;
-    };
-  };
-  visibility: string;
-  references: string[];
-};
-
-export type ExhibitionRecord = {
-  id: string;
-  title_zh: string;
-  subtitle_zh: string;
-  summary_zh: string;
-  content_zh: string;
-  museum_ids: string[];
-  chapters: {
-    title_zh: string;
-    subtitle_zh: string;
-    research_question: string;
-    museum_ids: string[];
-    keywords: string[];
-  }[];
-};
-
-type CategoryData = {
-  space_types: {
-    id: string;
-    label_zh: string;
-    label_en: string;
-    description_zh: string;
-  }[];
-  photo_categories: {
-    id: string;
-    label_zh: string;
-    label_en: string;
-    description_zh: string;
-  }[];
-};
-
-export const fmMuseums = museumsData as unknown as MuseumRecord[];
-export const fmPhotos = photosData as unknown as PhotoRecord[];
-export const fmExhibitions = exhibitionsData as unknown as ExhibitionRecord[];
-export const fmCategories = categoriesData as unknown as CategoryData;
-
-function countBy<T>(items: T[], getKey: (item: T) => string) {
-  const totals = new Map<string, number>();
-  for (const item of items) {
-    const key = getKey(item);
-    totals.set(key, (totals.get(key) ?? 0) + 1);
-  }
-
-  return Array.from(totals.entries())
-    .map(([label, count]) => ({ label, count }))
-    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, "zh-Hans-CN"));
-}
+export const fmMuseums = getAllMuseums();
+export const fmPhotos = getAllPhotos();
+export const fmExhibitions = getAllExhibitions();
+export const fmCategories = getCategories();
 
 const featuredIds = [
   "cn-film-museum",
@@ -130,10 +38,7 @@ export const fmTopProvinces = countBy(fmMuseums, (museum) => museum.province).sl
 
 export const fmTypeStats = countBy(fmMuseums, (museum) => museum.type).slice(0, 6);
 
-export const fmPhotoCategoryStats = countBy(
-  fmPhotos,
-  (photo) => photo.metadata.object_type,
-).slice(0, 5);
+export const fmPhotoCategoryStats = getPhotoCategoryStats().slice(0, 5);
 
 export const fmFeaturedMuseums = featuredIds
   .map((id) => fmMuseums.find((museum) => museum.id === id))
