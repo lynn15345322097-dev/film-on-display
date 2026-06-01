@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
 
-import { fmWorkbenchContext } from "@/components/archive/fm-content";
+import {
+  countBy,
+  getAllExhibitions,
+  getAllMuseums,
+  getAllPhotos,
+  getCategories,
+  getMuseumsByIds,
+  getSpatialStats,
+} from "@/lib/museums";
 import { createClient } from "@/lib/supabase/server";
 
 const DEEPSEEK_CHAT_COMPLETIONS_URL = "https://api.deepseek.com/chat/completions";
@@ -9,6 +17,104 @@ type IncomingMessage = {
   role: "user" | "assistant";
   content: string;
 };
+
+function buildArchiveSystemPrompt() {
+  const museums = getAllMuseums();
+  const photos = getAllPhotos();
+  const exhibitions = getAllExhibitions();
+  const categories = getCategories();
+  const spatialStats = getSpatialStats();
+  const photoObjectStats = countBy(photos, (photo) => photo.metadata.object_type);
+  const photoVisibilityStats = countBy(photos, (photo) => photo.visibility);
+  const photoRestrictionStats = countBy(
+    photos,
+    (photo) => photo.rights.institutional_restriction.status,
+  );
+
+  const museumIndex = museums
+    .map((museum) =>
+      [
+        museum.id,
+        museum.name,
+        `${museum.province}/${museum.city}/${museum.region}`,
+        `type=${museum.type}`,
+        `nature=${museum.nature}`,
+        `visited=${museum.visited ? "yes" : "no"}`,
+        `tags=${museum.tags.join(", ")}`,
+        `description=${museum.description}`,
+        `space=${museum.spaceObservation}`,
+        `exhibition=${museum.exhibitionAnalysis}`,
+      ].join(" | "),
+    )
+    .join("\n");
+
+  const routeIndex = exhibitions
+    .map((route) => {
+      const routeMuseums = getMuseumsByIds(route.museum_ids)
+        .map((museum) => `${museum.name}(${museum.province})`)
+        .join(", ");
+      const chapters = route.chapters
+        .map(
+          (chapter) =>
+            `${chapter.title_zh}: ${chapter.research_question}; keywords=${chapter.keywords.join(", ")}`,
+        )
+        .join(" / ");
+
+      return [
+        route.id,
+        route.title_zh,
+        route.subtitle_zh,
+        `summary=${route.summary_zh}`,
+        `museums=${routeMuseums}`,
+        `chapters=${chapters}`,
+      ].join(" | ");
+    })
+    .join("\n");
+
+  const photoIndex = photos
+    .map((photo) =>
+      [
+        photo.id,
+        photo.metadata.title_zh,
+        `museum_id=${photo.museum_id}`,
+        `exhibition_id=${photo.exhibition_id ?? "none"}`,
+        `object=${photo.metadata.object_type}`,
+        `visibility=${photo.visibility}`,
+        `license=${photo.rights.photographer_copyright.license}`,
+        `restriction=${photo.rights.institutional_restriction.status}`,
+        `download=${photo.rights.institutional_restriction.download_allowed ? "yes" : "no"}`,
+        `person=${photo.rights.personality_rights.contains_identifiable_person ? "yes" : "no"}`,
+      ].join(" | "),
+    )
+    .join("\n");
+
+  return [
+    "You are the archival research assistant for FILM ON DISPLAY 影像展陈.",
+    "Answer in the user's language. Be concise, scholarly, and clear.",
+    "Use the local archive context below as your primary source. If the archive does not contain enough evidence, say that clearly and suggest what field or source should be checked next.",
+    "Do not invent museum records, photo rights, coordinates, citations, or exhibition routes. Do not claim to have edited the database.",
+    "",
+    "DATASET SUMMARY",
+    `museums=${museums.length}; photos=${photos.length}; exhibitions=${exhibitions.length}; provinces=${spatialStats.provinceStats.length}; regions=${spatialStats.regionStats.length}; visited=${spatialStats.visitedCount}.`,
+    `regions=${spatialStats.regionStats.map((item) => `${item.region}:${item.count}, visited:${item.visited}`).join("; ")}`,
+    `top_provinces=${spatialStats.provinceStats.slice(0, 12).map((item) => `${item.province}:${item.count}, visited:${item.visited}`).join("; ")}`,
+    `types=${spatialStats.typeStats.map((item) => `${item.type}:${item.count}`).join("; ")}`,
+    `natures=${spatialStats.natureStats.map((item) => `${item.nature}:${item.count}`).join("; ")}`,
+    `photo_objects=${photoObjectStats.map((item) => `${item.label}:${item.count}`).join("; ")}`,
+    `photo_visibility=${photoVisibilityStats.map((item) => `${item.label}:${item.count}`).join("; ")}`,
+    `photo_restrictions=${photoRestrictionStats.map((item) => `${item.label}:${item.count}`).join("; ")}`,
+    `category_schema=${categories.space_types.map((item) => item.label_zh).join("; ")}`,
+    "",
+    "MUSEUM INDEX",
+    museumIndex,
+    "",
+    "EXHIBITION ROUTES",
+    routeIndex,
+    "",
+    "PHOTO RIGHTS AND METADATA INDEX",
+    photoIndex,
+  ].join("\n");
+}
 
 export async function POST(request: Request) {
   const supabase = await createClient();
@@ -62,13 +168,7 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "system",
-          content: [
-            "You are an archival research assistant for FILM ON DISPLAY 影像展陈.",
-            "Help with film heritage, GIS archive exploration, photo metadata, and technical classification. Be concise, scholarly, and clear. Do not claim to have written database records.",
-            `Current local research dataset: ${fmWorkbenchContext.stats.museums} exhibition spaces, ${fmWorkbenchContext.stats.photos} photo metadata records, ${fmWorkbenchContext.stats.exhibitions} curated research routes, ${fmWorkbenchContext.stats.provinces} provinces, ${fmWorkbenchContext.stats.cities} cities, ${fmWorkbenchContext.stats.visited} field-visited sites.`,
-            `Top provinces by record count: ${fmWorkbenchContext.topProvinces.map((item) => `${item.label} ${item.count}`).join(", ")}.`,
-            `Research routes: ${fmWorkbenchContext.routeTitles.join("；")}.`,
-          ].join("\n"),
+          content: buildArchiveSystemPrompt(),
         },
         ...messages,
       ],

@@ -1517,6 +1517,43 @@ body {
   text-transform: uppercase;
 }
 
+.archive-workbench-context {
+  position: absolute;
+  left: 24px;
+  bottom: 190px;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(82px, 1fr));
+  gap: 8px;
+}
+
+.archive-workbench-context article {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(18, 18, 18, 0.74);
+  color: white;
+  padding: 12px;
+}
+
+.archive-workbench-context span,
+.archive-chat-context-strip span {
+  display: block;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.archive-workbench-context span {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.archive-workbench-context b {
+  display: block;
+  font-size: 24px;
+  font-weight: 800;
+  margin-top: 6px;
+}
+
 .archive-chat-panel {
   display: flex;
   min-width: 0;
@@ -1575,6 +1612,31 @@ body {
 .archive-prompt-strip button:hover {
   border-color: var(--archive-primary);
   color: var(--archive-primary);
+}
+
+.archive-chat-context-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  border-bottom: 1px solid var(--archive-border);
+  padding: 0 24px 16px;
+}
+
+.archive-chat-context-strip article {
+  border: 1px solid var(--archive-border);
+  background: var(--archive-surface-low);
+  padding: 12px;
+}
+
+.archive-chat-context-strip span {
+  color: var(--archive-primary);
+}
+
+.archive-chat-context-strip p {
+  color: var(--archive-muted);
+  font-size: 11px;
+  line-height: 1.55;
+  margin-top: 8px;
 }
 
 .archive-message-list {
@@ -2466,6 +2528,8 @@ body {
   .archive-region-list,
   .archive-gallery-grid,
   .archive-route-museum-grid,
+  .archive-chat-context-strip,
+  .archive-workbench-context,
   .archive-route-grid {
     grid-template-columns: 1fr;
   }
@@ -2517,6 +2581,14 @@ body {
   .archive-map-card {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .archive-workbench-context {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    margin-top: 20px;
   }
 
   .archive-map-card img {

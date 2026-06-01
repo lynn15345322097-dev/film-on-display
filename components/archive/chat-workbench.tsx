@@ -42,8 +42,12 @@ type WorkbenchContext = {
     description: string;
   };
   topProvinces: { label: string; count: number }[];
+  typeStats: { label: string; count: number }[];
   photoCategories: { label: string; count: number }[];
+  photoVisibility: { label: string; count: number }[];
+  photoRestrictions: { label: string; count: number }[];
   routeTitles: string[];
+  routeSummaries: { id: string; title: string; museums: number; chapters: number }[];
 };
 
 const STORAGE_KEY = "film-on-display-chat";
@@ -59,10 +63,10 @@ const starterMessages: ChatMessage[] = [
 ];
 
 const prompts = [
-  "总结北京电影展示空间的样本特点",
+  "总结华北电影展示空间的分布特征",
   "比较制片厂旧址和电影资料馆的展陈逻辑",
-  "列出图像元数据里主要的对象类型",
-  "帮我设计一条上海附近的田野路线",
+  "哪些照片可以公开，哪些需要限制下载？",
+  "用现有数据说明研究方法和校验原则",
 ];
 
 export function ChatWorkbench({ context }: { context: WorkbenchContext }) {
@@ -210,6 +214,20 @@ export function ChatWorkbench({ context }: { context: WorkbenchContext }) {
             </div>
           </div>
         </div>
+        <div className="archive-workbench-context">
+          <article>
+            <span>ROUTES</span>
+            <b>{context.stats.exhibitions}</b>
+          </article>
+          <article>
+            <span>PROVINCES</span>
+            <b>{context.stats.provinces}</b>
+          </article>
+          <article>
+            <span>CITIES</span>
+            <b>{context.stats.cities}</b>
+          </article>
+        </div>
       </section>
 
       <section className="archive-chat-panel">
@@ -230,6 +248,21 @@ export function ChatWorkbench({ context }: { context: WorkbenchContext }) {
               {prompt}
             </button>
           ))}
+        </div>
+
+        <div className="archive-chat-context-strip">
+          <article>
+            <span>SPACE TYPES</span>
+            <p>{context.typeStats.slice(0, 4).map((item) => `${item.label} ${item.count}`).join(" / ")}</p>
+          </article>
+          <article>
+            <span>PHOTO RIGHTS</span>
+            <p>{context.photoVisibility.map((item) => `${item.label} ${item.count}`).join(" / ")}</p>
+          </article>
+          <article>
+            <span>ROUTES</span>
+            <p>{context.routeSummaries.map((route) => `${route.title} ${route.museums}馆`).join(" / ")}</p>
+          </article>
         </div>
 
         <div className="archive-message-list" ref={panelRef}>

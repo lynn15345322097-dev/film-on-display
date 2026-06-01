@@ -48,8 +48,20 @@ export const fmWorkbenchContext = {
   stats: fmStats,
   featuredMuseum: fmFeaturedMuseums[0],
   topProvinces: fmTopProvinces,
+  typeStats: fmTypeStats,
   photoCategories: fmPhotoCategoryStats,
+  photoVisibility: countBy(fmPhotos, (photo) => photo.visibility),
+  photoRestrictions: countBy(
+    fmPhotos,
+    (photo) => photo.rights.institutional_restriction.status,
+  ),
   routeTitles: fmExhibitions.map((route) => route.title_zh),
+  routeSummaries: fmExhibitions.map((route) => ({
+    id: route.id,
+    title: route.title_zh,
+    museums: route.museum_ids.length,
+    chapters: route.chapters.length,
+  })),
 };
 
 export const projectResearchQuestions = [
