@@ -1,13 +1,14 @@
-/* eslint-disable @next/next/no-img-element */
+import { Archive, Database, Map, Route, ShieldCheck } from "lucide-react";
 
-import { Archive, Camera, Database, Map, Route, ShieldCheck } from "lucide-react";
+import { getMuseumsByIds, getVisiblePhotos } from "@/lib/museums";
 
+import { ArchiveMapView } from "./map-view";
+import { MuseumCard } from "./museum-card";
 import {
   dataGovernanceItems,
   fmExhibitions,
   fmMuseums,
   fmPhotoCategoryStats,
-  fmPhotos,
   fmStats,
   fmTopProvinces,
   fmTypeStats,
@@ -15,6 +16,7 @@ import {
   projectResearchQuestions,
   themeExhibitions,
 } from "./fm-content";
+import { PhotoGallery } from "./photo-gallery";
 import { ArchiveFooter, ArchiveShell } from "./shell";
 
 export function MapPage() {
@@ -32,22 +34,9 @@ export function MapPage() {
       <section className="archive-page-grid two">
         <article className="archive-map-abstract">
           <Map size={24} />
-          <h2>支撑字段</h2>
+          <h2>点位图谱</h2>
           <p>id、name_zh、name_en、administrative_division、geo、classification、academic_context。</p>
-          <div className="archive-mini-map">
-            {fmMuseums.slice(0, 24).map((museum, index) => (
-              <span
-                key={museum.id}
-                style={{
-                  left: `${10 + ((museum.coordinates[1] - 73) / 63) * 80}%`,
-                  top: `${12 + ((54 - museum.coordinates[0]) / 36) * 76}%`,
-                  opacity: museum.visited ? 1 : 0.42,
-                  transform: `scale(${index % 4 === 0 ? 1.35 : 1})`,
-                }}
-                title={museum.name}
-              />
-            ))}
-          </div>
+          <ArchiveMapView />
         </article>
         <article className="archive-page-panel">
           <h2>筛选维度</h2>
@@ -79,15 +68,24 @@ export function MapPage() {
           ))}
         </div>
       </section>
+      <section className="archive-section">
+        <div className="archive-section-heading">
+          <h2>代表性空间</h2>
+          <div />
+        </div>
+        <div className="archive-museum-grid">
+          {fmMuseums.slice(0, 6).map((museum) => (
+            <MuseumCard key={museum.id} museum={museum} />
+          ))}
+        </div>
+      </section>
       <ArchiveFooter />
     </ArchiveShell>
   );
 }
 
 export function PhotosPage() {
-  const visiblePhotos = fmPhotos.filter((photo) =>
-    ["public", "public_thumbnail_only", "restricted"].includes(photo.visibility),
-  );
+  const visiblePhotos = getVisiblePhotos();
 
   return (
     <ArchiveShell>
@@ -113,22 +111,7 @@ export function PhotosPage() {
           ))}
         </div>
       </section>
-      <section className="archive-photo-wall">
-        {visiblePhotos.slice(0, 24).map((photo) => (
-          <article key={photo.id}>
-            <div>
-              <Camera size={22} />
-              <span>{photo.visibility}</span>
-            </div>
-            <h2>{photo.metadata.title_zh}</h2>
-            <p>{photo.metadata.description}</p>
-            <footer>
-              <b>{photo.metadata.object_type}</b>
-              <em>{photo.rights.institutional_restriction.status}</em>
-            </footer>
-          </article>
-        ))}
-      </section>
+      <PhotoGallery photos={visiblePhotos} />
       <ArchiveFooter />
     </ArchiveShell>
   );
@@ -154,6 +137,32 @@ export function ExhibitionsPage() {
               <h2>{route.title_zh}</h2>
               <h3>{route.subtitle_zh}</h3>
               <p>{route.summary_zh}</p>
+              <div className="archive-route-chapter-list">
+                {route.chapters.slice(0, 3).map((chapter) => (
+                  <section key={chapter.title_zh}>
+                    <b>{chapter.title_zh}</b>
+                    <small>{chapter.research_question}</small>
+                  </section>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="archive-section">
+        <div className="archive-section-heading">
+          <h2>展线涉及空间</h2>
+          <div />
+        </div>
+        <div className="archive-route-museum-grid">
+          {fmExhibitions.map((route) => (
+            <article key={route.id}>
+              <h3>{route.title_zh}</h3>
+              <p>
+                {getMuseumsByIds(route.museum_ids)
+                  .map((museum) => museum.name)
+                  .join(" / ")}
+              </p>
             </article>
           ))}
         </div>
@@ -170,6 +179,17 @@ export function ExhibitionsPage() {
               <h3>{theme}</h3>
               <p>作为后续策展页、论文图谱和研究展示的可视化入口。</p>
             </article>
+          ))}
+        </div>
+      </section>
+      <section className="archive-section">
+        <div className="archive-section-heading">
+          <h2>样本空间</h2>
+          <div />
+        </div>
+        <div className="archive-museum-grid">
+          {fmMuseums.slice(0, 3).map((museum) => (
+            <MuseumCard key={museum.id} museum={museum} />
           ))}
         </div>
       </section>
