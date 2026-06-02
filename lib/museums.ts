@@ -60,14 +60,16 @@ export interface MuseumGeoJSONFeature {
   };
   properties: {
     id: string;
-    name: string;
-    nameEn: string;
-    region: string;
+    name_zh: string;
+    name_en: string | null;
     province: string;
     city: string;
-    type: string;
-    nature: string;
-    visited: boolean;
+    classification: string;
+    classification_nature: string;
+    latitude: number;
+    longitude: number;
+    coordinate_system: string;
+    verification_status: string;
     tags: string[];
     address: string;
   };
@@ -91,6 +93,34 @@ export interface MuseumMapPoint {
   coordinates: [number, number];
   coordinateSource: string;
   color: string;
+}
+
+export interface MuseumMapRecord {
+  id: string;
+  name_zh: string;
+  name_en: string | null;
+  province: string;
+  city: string;
+  classification: string;
+  classification_nature: string;
+  latitude: number | null;
+  longitude: number | null;
+  coordinate_system: string;
+  verification_status: string;
+  tags: string[];
+  address: string;
+}
+
+export interface MuseumMapData {
+  geojson: MuseumGeoJSON;
+  records: MuseumMapRecord[];
+  pendingRecords: MuseumMapRecord[];
+  filterOptions: {
+    provinces: string[];
+    cities: string[];
+    classifications: string[];
+    tags: string[];
+  };
 }
 
 export const TYPE_COLORS: Record<string, string> = {
@@ -220,29 +250,84 @@ export function getCategories(): CategoryData {
   return categories;
 }
 
-export function museumsToGeoJSON(museumList: Museum[] = museums): MuseumGeoJSON {
+function toMuseumMapRecord(museum: MuseumRecord): MuseumMapRecord {
+  const latitude = museum.geo?.latitude ?? museum.coordinates?.[0] ?? null;
+  const longitude = museum.geo?.longitude ?? museum.coordinates?.[1] ?? null;
+  const classification = museum.classification?.type ?? museum.type;
+
+  return {
+    id: museum.id,
+    name_zh: museum.name_zh ?? museum.name,
+    name_en: museum.name_en ?? museum.nameEn ?? null,
+    province: museum.administrative_division?.province ?? museum.province,
+    city: museum.administrative_division?.city ?? museum.city,
+    classification,
+    classification_nature: museum.classification?.nature ?? museum.nature,
+    latitude,
+    longitude,
+    coordinate_system: museum.geo?.coordinate_system ?? "unknown",
+    verification_status: museum.geo?.coordinate_source ?? "pending_verification",
+    tags: museum.tags,
+    address: museum.administrative_division?.address ?? museum.address,
+  };
+}
+
+function hasVerifiedCoordinates(record: MuseumMapRecord): record is MuseumMapRecord & {
+  latitude: number;
+  longitude: number;
+} {
+  return (
+    typeof record.latitude === "number" &&
+    Number.isFinite(record.latitude) &&
+    typeof record.longitude === "number" &&
+    Number.isFinite(record.longitude) &&
+    record.verification_status !== "pending_verification"
+  );
+}
+
+export function museumsToGeoJSON(museumList: MuseumRecord[] = museums): MuseumGeoJSON {
+  const records = museumList.map(toMuseumMapRecord).filter(hasVerifiedCoordinates);
+
   return {
     type: "FeatureCollection",
-    features: museumList.map((museum) => ({
+    features: records.map((record) => ({
       type: "Feature" as const,
       geometry: {
         type: "Point" as const,
-        coordinates: [museum.coordinates[1], museum.coordinates[0]],
+        coordinates: [record.longitude, record.latitude],
       },
       properties: {
-        id: museum.id,
-        name: museum.name,
-        nameEn: museum.nameEn,
-        region: museum.region,
-        province: museum.province,
-        city: museum.city,
-        type: museum.type,
-        nature: museum.nature,
-        visited: museum.visited ?? false,
-        tags: museum.tags,
-        address: museum.address,
+        id: record.id,
+        name_zh: record.name_zh,
+        name_en: record.name_en,
+        province: record.province,
+        city: record.city,
+        classification: record.classification,
+        classification_nature: record.classification_nature,
+        latitude: record.latitude,
+        longitude: record.longitude,
+        coordinate_system: record.coordinate_system,
+        verification_status: record.verification_status,
+        tags: record.tags,
+        address: record.address,
       },
     })),
+  };
+}
+
+export function getMuseumMapData(museumList: MuseumRecord[] = museums): MuseumMapData {
+  const records = museumList.map(toMuseumMapRecord);
+
+  return {
+    geojson: museumsToGeoJSON(museumList),
+    records,
+    pendingRecords: records.filter((record) => !hasVerifiedCoordinates(record)),
+    filterOptions: {
+      provinces: [...new Set(records.map((record) => record.province))].sort(),
+      cities: [...new Set(records.map((record) => record.city))].sort(),
+      classifications: [...new Set(records.map((record) => record.classification))].sort(),
+      tags: [...new Set(records.flatMap((record) => record.tags))].sort(),
+    },
   };
 }
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
+import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL

@@ -64,21 +64,24 @@ export function MapPage() {
           空间集聚和文化资源配置的研究入口。
         </p>
       </section>
+      <section className="archive-section archive-maplibre-section">
+        <div className="archive-section-heading">
+          <h2>MapLibre GL JS 点位图谱</h2>
+          <div />
+        </div>
+        <ArchiveMapView />
+      </section>
       <section className="archive-page-grid two">
-        <article className="archive-map-abstract">
-          <Map size={24} />
-          <h2>点位图谱</h2>
-          <p>id、name_zh、name_en、administrative_division、geo、classification、academic_context。</p>
-          <ArchiveMapView />
-        </article>
         <article className="archive-page-panel">
           <h2>筛选维度</h2>
           <ul>
             <li>省份、城市与区域</li>
             <li>空间类型与机构属性</li>
-            <li>开馆时间、改造时间与田野调研时间</li>
-            <li>展陈主题、技术遗产类型与照片对象类型</li>
+            <li>技术遗产标签与展陈主题</li>
+            <li>坐标系统、坐标来源与核验状态</li>
           </ul>
+        </article>
+        <article className="archive-page-panel">
           <h2>当前数据概况</h2>
           <div className="archive-page-stats">
             <b>{fmStats.museums}</b><span>展示空间</span>
