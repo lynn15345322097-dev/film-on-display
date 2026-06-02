@@ -272,7 +272,7 @@ function toMuseumMapRecord(museum: MuseumRecord): MuseumMapRecord {
   };
 }
 
-function hasVerifiedCoordinates(record: MuseumMapRecord): record is MuseumMapRecord & {
+function hasRenderableCoordinates(record: MuseumMapRecord): record is MuseumMapRecord & {
   latitude: number;
   longitude: number;
 } {
@@ -286,7 +286,7 @@ function hasVerifiedCoordinates(record: MuseumMapRecord): record is MuseumMapRec
 }
 
 export function museumsToGeoJSON(museumList: MuseumRecord[] = museums): MuseumGeoJSON {
-  const records = museumList.map(toMuseumMapRecord).filter(hasVerifiedCoordinates);
+  const records = museumList.map(toMuseumMapRecord).filter(hasRenderableCoordinates);
 
   return {
     type: "FeatureCollection",
@@ -321,7 +321,7 @@ export function getMuseumMapData(museumList: MuseumRecord[] = museums): MuseumMa
   return {
     geojson: museumsToGeoJSON(museumList),
     records,
-    pendingRecords: records.filter((record) => !hasVerifiedCoordinates(record)),
+    pendingRecords: records.filter((record) => !hasRenderableCoordinates(record)),
     filterOptions: {
       provinces: [...new Set(records.map((record) => record.province))].sort(),
       cities: [...new Set(records.map((record) => record.city))].sort(),

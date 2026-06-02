@@ -14,6 +14,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 import { archiveImages } from "./data";
 
@@ -274,7 +275,9 @@ export function ChatWorkbench({ context }: { context: WorkbenchContext }) {
                   {isUser ? <UserRound size={16} /> : <Bot size={16} />}
                 </div>
                 <div className="archive-message-bubble">
-                  <p>{message.content}</p>
+                  <div className="archive-message-markdown">
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                  </div>
                   <span>{message.timestamp}</span>
                 </div>
               </article>
