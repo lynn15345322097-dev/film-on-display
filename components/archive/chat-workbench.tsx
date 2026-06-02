@@ -289,7 +289,7 @@ export function ChatWorkbench({ context }: { context: WorkbenchContext }) {
                 <Bot size={16} />
               </div>
               <div className="archive-message-bubble thinking">
-                <p>Calling DeepSeek deepseek-v4-pro...</p>
+                <p>正在思考，请稍后...</p>
               </div>
             </article>
           )}
