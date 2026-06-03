@@ -79,7 +79,7 @@ export async function ArchiveHomePage() {
         <div className="archive-hero-copy">
           <span>Research Initiative No. 01</span>
           <h1>
-            Film on Display <em>/ A Digital Map of China&apos;s Film Exhibition Spaces</em>
+            影迹图谱 <em>/ FilmGeo Atlas</em>
           </h1>
           <h2>让中国电影史，在空间、器物与展陈中重新展开</h2>
           <p>

@@ -84,8 +84,8 @@ export function ArchiveFooter() {
   return (
     <footer className="archive-footer">
       <div>
-        <strong>FILM ON DISPLAY</strong>
-        <p>© 2026 Film on Display. Digital Humanities Research Archive.</p>
+        <strong>影迹图谱 FilmGeo Atlas</strong>
+        <p>© 2026 FilmGeo Atlas. Digital Humanities Research Archive.</p>
       </div>
       <nav>
         <a href="#">Rights Management</a>

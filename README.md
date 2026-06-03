@@ -1,6 +1,6 @@
-# Film on Display: A Digital Map of China's Film Exhibition Spaces
+# 影迹图谱 FilmGeo Atlas: A Digital Map of China's Film Exhibition Spaces
 
-Film on Display is a lightweight digital humanities project about film exhibition spaces in China. It combines fieldwork, GIS mapping, exhibition documentation, photo metadata, and rights-aware data governance to build an online exhibition and open research archive.
+影迹图谱 (FilmGeo Atlas) is a lightweight digital humanities project about film exhibition spaces in China. It combines fieldwork, GIS mapping, exhibition documentation, photo metadata, and rights-aware data governance to build an online exhibition and open research archive.
 
 The project focuses on how film museums, studio heritage sites, image archives, private technology collections, and film-themed public spaces preserve, organize, and reinterpret film technology, local image memory, and Chinese film history.
 
@@ -92,4 +92,4 @@ Supabase Auth and DeepSeek API credentials are configured through environment va
 
 When using the structured dataset or research text, cite this project as:
 
-Film on Display: A Digital Map of China's Film Exhibition Spaces.
+影迹图谱 FilmGeo Atlas: A Digital Map of China's Film Exhibition Spaces.

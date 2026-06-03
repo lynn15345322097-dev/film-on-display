@@ -518,7 +518,7 @@ export function ArchiveMapView({ museums }: ArchiveMapViewProps) {
         )}
         <div className="archive-maplibre-canvas-overlay">
           <span className="map-label">
-            中国电影展示空间 · Film Exhibition Spaces in China
+            影迹图谱 · FilmGeo Atlas
           </span>
         </div>
       </div>

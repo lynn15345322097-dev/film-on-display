@@ -33,7 +33,7 @@ export function ArchiveNav({ isSignedIn }: { isSignedIn: boolean }) {
   return (
     <header className="archive-topbar">
       <Link className="archive-brand" href="/">
-        FILM ON DISPLAY <span>影像展陈</span>
+        影迹图谱 <span>FilmGeo Atlas</span>
       </Link>
       <nav className="archive-navlinks" aria-label="Main navigation">
         {navItems.map((item) => {

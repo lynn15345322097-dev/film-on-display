@@ -51,7 +51,7 @@ type WorkbenchContext = {
   routeSummaries: { id: string; title: string; museums: number; chapters: number }[];
 };
 
-const STORAGE_KEY = "film-on-display-chat";
+const STORAGE_KEY = "filmgeo-atlas-chat";
 
 const starterMessages: ChatMessage[] = [
   {

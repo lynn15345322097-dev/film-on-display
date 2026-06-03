@@ -9,7 +9,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "FILM ON DISPLAY 影像展陈",
+  title: "影迹图谱 FilmGeo Atlas",
   description: "A digital humanities archive and chat workbench for film heritage research.",
 };
 
